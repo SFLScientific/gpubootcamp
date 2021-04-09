@@ -97,7 +97,7 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     fix-permissions $CONDA_DIR
 
 USER $NB_UID
-ARG PYTHON_VERSION=default
+ARG PYTHON_VERSION=3.7
 
 # Setup work directory for backward-compatibility
 RUN mkdir "/home/$NB_USER/work" && \
@@ -120,7 +120,7 @@ RUN wget --quiet "https://github.com/conda-forge/miniforge/releases/download/${m
     conda install --quiet --yes \
     "conda=${CONDA_VERSION}" \
     'pip' \
-    'tini=0.18.0' && \
+    'tini=0.18.0' python=3.7 && \
     conda update --all --quiet --yes && \
     conda list tini | grep tini | tr -s ' ' | cut -d ' ' -f 1,2 >> $CONDA_DIR/conda-meta/pinned && \
     conda clean --all -f -y && \
@@ -130,7 +130,15 @@ RUN wget --quiet "https://github.com/conda-forge/miniforge/releases/download/${m
 
 # only difference from base notebook setup
 # setup rapids and dask
-RUN conda install -c conda-forge scikit-learn tensorflow-gpu -c nvidia 
+RUN conda install -c rapidsai -c nvidia -c conda-forge \
+    -c defaults python=3.7 cudatoolkit=10.2 scikit-learn tensorflow-gpu=2.0.0
+
+#
+#RUN conda install -c conda-forge scikit-learn tensorflow-gpu=2.0.0 -c nvidia 
+
+#RUN conda install cudatoolkit=10.2
+#RUN conda install cudnn=7.4=cuda10.2
+
 #-c conda-forge defaults python=3.8 cudatoolkit=11.0
 
 RUN conda install opencv pandas seaborn matplotlib scikit-fmm tqdm h5py gdown jupytext
