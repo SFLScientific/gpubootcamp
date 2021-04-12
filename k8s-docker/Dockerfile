@@ -81,7 +81,6 @@ RUN fix-permissions "/home/$NB_USER"
 
 USER root
 
-#RUN pip install jupyter jupyterlab tini
 
 RUN pip install opencv-python==4.1.2.30 pandas seaborn sklearn matplotlib scikit-fmm tqdm h5py gdown
 
@@ -138,6 +137,8 @@ RUN python3 $HOME/CFD/python/source_code/dataset.py
 
 RUN chown -R jovyan $HOME/**
 
+
+RUN pip install jupyter jupyterlab jupyterhub
 
 USER $NB_UID
 
