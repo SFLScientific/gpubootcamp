@@ -26,28 +26,31 @@
 
 import gdown
 import os
+
+user = os.environ.get('NB_USER')
+
 ## CFD TRAIN DATASET
 url = 'https://drive.google.com/uc?id=0BzsbU65NgrSuZDBMOW93OWpsMHM&export=download'
-output = '/home/jovyan/CFD/python/jupyter_notebook/CFD/data/train.tfrecords'
+output = '/home/{}/CFD/python/jupyter_notebook/CFD/data/train.tfrecords'.format(user)
 gdown.download(url, output, quiet=False,proxy=None)
 
 ## CFD TEST DATASET
 url = 'https://drive.google.com/uc?id=1WSJLK0cOQehixJ6Tf5k0eYDcb4RJ5mXv&export=download'
-output = '/home/jovyan/CFD/python/jupyter_notebook/CFD/data/test.tfrecords'
+output = '/home/{}/CFD/python/jupyter_notebook/CFD/data/test.tfrecords'.format(user)
 gdown.download(url, output, quiet=False,proxy=None)
 
 ## CFD CONV_SDF MODEL
 url = 'https://drive.google.com/uc?id=1pfR0io1CZKvXArGk-nt2wciUoAN_6Z08&export=download'
-output = '/home/jovyan/CFD/python/jupyter_notebook/CFD/conv_sdf_model.h5'
+output = '/home/{}/CFD/python/jupyter_notebook/CFD/conv_sdf_model.h5'.format(user)
 gdown.download(url, output, quiet=False,proxy=None)
 
 ## CFD CONV MODEL
 url = 'https://drive.google.com/uc?id=1rFhqlQnTkzIyZocjAxMffucmS3FDI0_j&export=download'
-output = '/home/jovyan/CFD/python/jupyter_notebook/CFD/conv_model.h5'
+output = '/home/{}/CFD/python/jupyter_notebook/CFD/conv_model.h5'.format(user)
 gdown.download(url, output, quiet=False,proxy=None)
 
 
 ## CFD TEST Dataset
 url = 'https://drive.google.com/uc?id=0BzsbU65NgrSuR2NRRjBRMDVHaDQ&export=download'
-output = '/home/jovyan/CFD/python/jupyter_notebook/CFD/data/computed_car_flow.zip'
+output = '/home/{}/CFD/python/jupyter_notebook/CFD/data/computed_car_flow.zip'.format(user)
 gdown.cached_download(url, output, quiet=False,proxy=None,postprocess=gdown.extractall)

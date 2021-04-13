@@ -1,20 +1,9 @@
-ARG ROOT_CONTAINER=nvcr.io/nvidia/tensorflow:20.01-tf2-py3
-#ARG ROOT_CONTAINER=nvcr.io/nvidia/tensorflow:21.03-tf2-py3
-
-ARG BASE_CONTAINER=$ROOT_CONTAINER
-FROM $BASE_CONTAINER
-
-
+FROM nvcr.io/nvidia/tensorflow:20.01-tf2-py3
 LABEL maintainer="Nick Smith <nsmith@sflscientific.com>"
 
 
-
-# Select Base Image 
-
-
-# Same as default base notebook
-
-ARG NB_USER="jovyan"
+# Set user ID and name
+ARG NB_USER="workshopuser"
 ARG NB_UID="1000"
 ARG NB_GID="100"
 
@@ -63,7 +52,7 @@ RUN sed -i 's/^#force_color_prompt=yes/force_color_prompt=yes/' /etc/skel/.bashr
    # Add call to conda init script see https://stackoverflow.com/a/58081608/4413446
    echo 'eval "$(command conda shell.bash hook 2> /dev/null)"' >> /etc/skel/.bashrc 
 
-# Create NB_USER with name jovyan user with UID=1000 and in the 'users' group
+# Create NB_USER with UID=1000 and in the 'users' group
 # and make sure these dirs are writable by the `users` group.
 RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     sed -i.bak -e 's/^%admin/#%admin/' /etc/sudoers && \
@@ -72,19 +61,17 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     chmod g+w /etc/passwd && \
     fix-permissions $HOME
 
+# fix the permissions of the home directory
 USER $NB_UID
-
-
-# Setup work directory for backward-compatibility
 RUN fix-permissions "/home/$NB_USER"
 
 
 USER root
 
-
+# install requirements for the workshop
 RUN pip install opencv-python==4.1.2.30 pandas seaborn sklearn matplotlib scikit-fmm tqdm h5py gdown
 
-
+# generate the config for jhub
 RUN jupyter notebook --generate-config && \
     jupyter lab clean && \
     rm -rf /home/$NB_USER/.cache/yarn && \
@@ -109,41 +96,29 @@ RUN sed -re "s/c.NotebookApp/c.ServerApp/g" \
 
 RUN fix-permissions /etc/jupyter/
 
-# Switch back to jovyan to avoid accidental container runs as root
 
+# copy the workshop files into place
 
-
-RUN rm -rf $HOME/work
-
-# copy stuff into place
-
-
-# Climate
-
-
-# TO COPY the data 
+# Climate notebooks
 COPY hpc_ai/ai_science_climate/English/ $HOME/Climate
-
-# This Installs All the Dataset
+# Pre-Download the Dataset
 RUN python3 $HOME/Climate/python/source_code/dataset.py
 
 
-# TO COPY the data 
+# CFD notebools
 COPY hpc_ai/ai_science_cfd/English/ $HOME/CFD
-
-RUN mkdir -p /home/jovyan/CFD/python/jupyter_notebook/CFD/data
-# This Installs All the Dataset
+# Pre-download the dataset
+RUN mkdir -p /home/$NB_USER/CFD/python/jupyter_notebook/CFD/data
 RUN python3 $HOME/CFD/python/source_code/dataset.py
 
-RUN chown -R jovyan $HOME/**
+# Take ownership of the home directory
+RUN chown -R $NB_USER $HOME/**
 
-
+# Install jhub for singe-user commands to be available
 RUN pip install jupyter jupyterlab jupyterhub
 
+# work as notebook user
 USER $NB_UID
-
-
-
 WORKDIR $HOME
 
 

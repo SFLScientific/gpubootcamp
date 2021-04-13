@@ -26,13 +26,14 @@
 
 import gdown
 import os
+user = os.environ.get('NB_USER')
 
 ## TC TL MODEL  
 url = 'https://drive.google.com/uc?id=1crZ7dHhMRuE_N-8NAzF7Nrb6AVfpxThj&export=download'
-output = '/home/jovyan/Climate/python/jupyter_notebook/Tropical_Cyclone_Intensity_Estimation/trained_16.h5'
+output = '/home/{}/Climate/python/jupyter_notebook/Tropical_Cyclone_Intensity_Estimation/trained_16.h5'.format(user)
 gdown.download(url, output, quiet=False,proxy=None)
 ## TC Dataset  
 url = 'https://drive.google.com/uc?id=1x0vNpYMa4UM95svCL_Cxty8rzjQmG0Rz&export=download'
-output = '/home/jovyan/Climate/python/jupyter_notebook/Tropical_Cyclone_Intensity_Estimation/dataset.zip'
+output = '/home/{}/Climate/python/jupyter_notebook/Tropical_Cyclone_Intensity_Estimation/dataset.zip'.format(user)
 gdown.cached_download(url, output, quiet=False,proxy=None,postprocess=gdown.extractall)
 

@@ -1,8 +1,7 @@
 # k8s single user version docker image
 
-Docker image to replicate base notebook image from [here](https://github.com/jupyter/docker-stacks/tree/master/base-notebook) but based on nvidia/cuda 20.04 along with Dask and Rapids installed and functional from notebooks.
+The image contains the workshop with all requirements and datasets pre-installed/downloaded.
+It is able to be ran on its own with `docker run --rm -it -p 8888:8888 image_name` to run the workshop as normal.
+It is also able to be ran in a jupyterhub k8s setup.
 
-Compatible with jupyterhub (since rapids docker image isnt) and runnable standalone.
-
-Build command `docker build -f Dockerfile -t rapidsjhubsingleruser .`
-
+To build the image, run `build.sh` or `docker build -t image_name -f k8s-docker/Dockerfile .` from the root of the repo.
