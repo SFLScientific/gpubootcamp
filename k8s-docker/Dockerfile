@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/tensorflow:20.01-tf2-py3
+FROM nvcr.io/nvidia/tensorflow:21.04-tf2-py3
 LABEL maintainer="Nick Smith <nsmith@sflscientific.com>"
 
 
